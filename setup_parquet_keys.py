@@ -1,12 +1,13 @@
 import duckdb
 
-# Connect to a database (or create one)
-con = duckdb.connect('mydb.duckdb')  # This will create mydb.duckdb in this folder
+# Connect to the database (or create one if it doesn't exist)
+con = duckdb.connect('mydb.duckdb')
+print("Database connected successfully.")
 
-# Add your Parquet encryption keys
+# Add Parquet encryption keys (16-byte keys for AES-128)
 con.execute("PRAGMA add_parquet_key('footer_key_name', '1234567890123456');")
-con.execute("PRAGMA add_parquet_key('column1_key', 'abcdef1234567890');")
+con.execute("PRAGMA add_parquet_key('name_key', 'abcdef1234567890');")
+con.execute("PRAGMA add_parquet_key('email_key', 'emailkey12345678');")
+con.execute("PRAGMA add_parquet_key('ssn_key', 'ssnkey1234567890');")
 
-# Verify the keys
-keys = con.execute("SELECT * FROM pragma_key_list();").fetchall()
-print("Current keys in database:", keys)
+print("Keys have been registered successfully.")
